@@ -29,6 +29,26 @@ const authModels = {
             return row[0];
         }
         return null;
+    },
+
+    buscaVerificado: async (uuid) => {
+        const sql = 'SELECT verificado from usuarios WHERE uuid = ?';
+        const [row] = await db.execute(sql, [uuid]);
+
+        if(row.length > 0){
+            return row[0].verificado;
+        }
+
+        throw new Error("Usuário não encontrado!");
+    },
+
+    verificarUsuario: async (uuid) => {
+        const sql = 'UPDATE usuarios SET verificado = 1 WHERE uuid = ?'
+        const [result] = await db.execute(sql, [uuid]);
+
+        if(result.affectedRows == 0){
+            throw new Error("Erro ao verificar usuário!");
+        }
     }
 
 }

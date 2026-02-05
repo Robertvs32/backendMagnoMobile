@@ -1,5 +1,6 @@
 import authServices from '../services/auth.services.js';
 import { enviarLinkConfirmacao } from '../services/whatsapp.services.js';
+import authModels from '../models/auth.models.js';
 
 const authController = {
 
@@ -46,21 +47,26 @@ const authController = {
         }
     },
 
-    testetoken: async (req, res) => {
+    verificarVerificado: async (req, res) => {
         try{
-            const flag = req.body.flag;
+            const uuid = req.params.uuid;
+            const verificado = await authModels.buscaVerificado(uuid);
 
-            return flag == 1 
-                ? 
-            res.status(200).json({mensagem: 'Valido, deu certo o token'}) 
-                : 
-            res.status(500).json({mensagem: "Erro no envio"});
-                    
+            res.status(200).json({verificado}); 
         }catch(error){
-            res.status(200).json({
-                mensagem: error.message ?? "Erro no envio do token"
-            })
+            res.status(500).json({mensagem: error.message})
         }
+    },
+
+    verificar: async (req, res) => {
+        try{
+            const uuid = req.body.uuid;
+            await authModels.verificarUsuario(uuid);
+            res.status(200).json({mensagem: "Usuário verificado!"});
+        }catch(error){
+            res.status(500).json({mensagem: error.message});
+        }
+    
     }
 
 }

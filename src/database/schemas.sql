@@ -11,6 +11,7 @@ CREATE TABLE usuarios(
     cep CHAR(8) NOT NULL,
     numero VARCHAR(10) NOT NULL,
     roles ENUM('cliente', 'barbeiro', 'adm') NOT NULL DEFAULT 'cliente' ,
-    verificado BOOLEAN NOT NULL DEFAULT false ,
+    verificado BOOLEAN NOT NULL DEFAULT false,
+    status BOOLEAN NOT NULL DEFAULT true,
     refresh_token TEXT NULL
 );

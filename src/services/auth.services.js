@@ -4,7 +4,7 @@ import authModels from '../models/auth.models.js';
 import jwt from 'jsonwebtoken'
 import crypto from 'node:crypto';
 
-dotenv.config();
+dotenv.config({path: '../../.env'});
 
 const authServices = {
 
@@ -65,8 +65,8 @@ const authServices = {
         return{
             usuario: {
                 id: user.id,
-                email: user.email,
-                nome: user.nome
+                nome: user.nome,
+                roles: user.roles   
             },
             token,
             refreshToken

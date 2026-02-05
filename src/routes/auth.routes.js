@@ -7,6 +7,7 @@ const router = Router();
 router.post('/cadastrar', authController.cadastro);
 router.post('/login', authController.login);
 router.post('/refreshtoken', authController.refreshToken)
-router.post('/testetoken', authMiddleware.verifyToken, authController.testetoken);
+router.get('/verificarverificado/:uuid', authController.verificarVerificado);
+router.post('/verificar', authController.verificar);
 
 export default router;

@@ -4,9 +4,9 @@ import cors from 'cors'
 import router from './routes/auth.routes.js';
 import { iniciarWhatsapp } from './services/whatsapp.services.js';
 
-const app = express();
+dotenv.config({path: '../.env'});
 
-dotenv.config();
+const app = express();
 
 iniciarWhatsapp();
 

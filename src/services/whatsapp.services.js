@@ -29,6 +29,6 @@ export const iniciarWhatsapp = () => {
 }
 
 export const enviarLinkConfirmacao = async (nome, uuid, celular) => {
-    const link = `magnobarbearia.com/${uuid}`
+    const link = `magenta-ostrich-407854.hostingersite.com/${uuid}`
     return await instanciaWhatsapp.sendText(`${celular}@c.us`,`Bem vindo(a) *${nome}*, confirme seu cadastro atraves do link: \n\n ${link}`);
 }
