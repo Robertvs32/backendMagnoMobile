@@ -8,7 +8,7 @@ dotenv.config({path: '../../.env'});
 
 const authServices = {
 
-    cadastrar: async (objetoDados) => {
+    cadastrarCliente: async (objetoDados) => {
         let dados = objetoDados;
 
         const hashSenha = await authServices.gerarHashSenha(objetoDados.senha);
@@ -17,7 +17,27 @@ const authServices = {
 
         dados = {...objetoDados, senha: hashSenha, uuid: uuid}
 
-        await authModels.cadastrar(dados)
+        await authModels.cadastrarCliente(dados)
+
+        return { 
+            uuid: dados.uuid, 
+            nome: dados.nome,
+            celular: dados.celular
+        }
+    },
+
+    cadastrarProfissional: async (objetoDados) => {
+        let dados = objetoDados;
+
+        const hashSenha = await authServices.gerarHashSenha(objetoDados.senha);
+
+        const uuid = crypto.randomUUID();
+
+        dados = {...objetoDados, senha: hashSenha, uuid: uuid}
+
+        const id = await authModels.cadastrarProfissional(dados)
+
+        await authModels.addFolgaProfissional(id);
 
         return { 
             uuid: dados.uuid, 
@@ -57,7 +77,7 @@ const authServices = {
         const secretToken = process.env.JWT_SECRET;
         const secretRefreshToken = process.env.JWT_SECRET_REFRESH;
 
-        const token = jwt.sign(payloadToken, secretToken, { expiresIn: '15m'});
+        const token = jwt.sign(payloadToken, secretToken, { expiresIn: '1m'});
         const refreshToken = jwt.sign(payloadToken, secretRefreshToken, { expiresIn: '7d'});
 
         await authModels.guardarRefreshToken(user.id, refreshToken);
@@ -95,7 +115,7 @@ const authServices = {
         }
 
         //cria token
-        const novoToken = jwt.sign(payloadToken, process.env.JWT_SECRET, { expiresIn: '15m' });
+        const novoToken = jwt.sign(payloadToken, process.env.JWT_SECRET, { expiresIn: '1m' });
 
         return novoToken;
     }

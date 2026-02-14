@@ -21,11 +21,23 @@ const authMiddleware = {
             req.email =  decodificado.email
             req.nome = decodificado.nome
             req.roles = decodificado.roles
-            console.log(token);
+
             next();
         }catch(error){
             return res.status(401).json({mensagem: "Token invalido!"});
         }
+    },
+
+    verifyAdm: (req, res, next) => {
+        try{
+            if(req.roles !== 'adm'){
+                throw new Error("Acesso negado!");
+            }
+            next();
+        }catch(error){
+            res.status(403).json({mensagem: "Acesso negado!"})
+        };
+        
     }
 
 }

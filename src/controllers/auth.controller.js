@@ -4,19 +4,36 @@ import authModels from '../models/auth.models.js';
 
 const authController = {
 
-    cadastro: async (req, res) => {
+    cadastroCliente: async (req, res) => {
         try{
             const objetoDados = req.body;
-            const {nome, uuid, celular} = await authServices.cadastrar(objetoDados);
+            const {nome, uuid, celular} = await authServices.cadastrarCliente(objetoDados);
 
             enviarLinkConfirmacao(nome, uuid, celular);
 
             res.status(201).json({
-                mensagem: "Usuario criado com sucesso!"
+                mensagem: "Cliente cadastrado com sucesso!"
             });
         }catch(error){
             res.status(400).json({
-                mensagem: error.message ?? "Erro ao cadastrar usuario!"
+                mensagem: error.message ?? "Erro ao cadastrar cliente!"
+            });
+        }
+    },
+
+    cadastroProfissional: async (req, res) => {
+        try{
+            const objetoDados = req.body;
+            const {nome, uuid, celular} = await authServices.cadastrarProfissional(objetoDados);
+
+            enviarLinkConfirmacao(nome, uuid, celular);
+
+            res.status(201).json({
+                mensagem: "Profissional cadastrado com sucesso!"
+            });
+        }catch(error){
+            res.status(400).json({
+                mensagem: error.message ?? "Erro ao cadastrar profissional!"
             });
         }
     },
