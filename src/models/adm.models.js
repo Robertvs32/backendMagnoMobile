@@ -1,15 +1,21 @@
 import pool from "../database/pool.js";
 
-const servicosModels = {
+const admModels = {
 
-    atualizarValorServico: async (preco, id) => {
-        const sql = "UPDATE servicos SET preco = ? WHERE id_servico = ?"
-        await pool.execute(sql, [preco, id])
+    addFolgaProfissional: async (id) => {
+        const sql = "INSERT INTO folga_profissionais(id_profissional, dia_da_semana) values(?, 0)"
+        await pool.execute(sql, [id]);
     },
 
-    adicionaDiaOff: async (dia) => {
-        const sql = "INSERT INTO dias_off(data_off) value(?) ";
-        await pool.execute(sql, [dia])
+    desativarUsuario: async (id) => {
+        const sql = "UPDATE usuarios SET status = 'desativado WHERE id = ?";
+        const [row] = await pool.execute(sql, [id]);
+
+        if(row.affectedRows == 1){
+            return 1;
+        }
+
+        return 0;
     },
 
     buscarAgendamentosAdm : async () => {
@@ -45,4 +51,4 @@ const servicosModels = {
 
 }
 
-export default servicosModels;
+export default admModels;

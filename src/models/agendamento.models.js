@@ -31,15 +31,15 @@ const agendamentoModels = {
         return row;
     },
 
-    buscaHorariosReservados: async (dia, id_profissional) => {
+    buscaAgendamentos: async (dia, id_profissional) => {
         const sql = 
         `
-            SELECT horas FROM agendamentos 
+            SELECT horario, id_servico FROM agendamentos 
             WHERE dia = ?
             AND id_profissional = ?
         `
-        const [row] = await pool.execute(sql, [dia, id_profissional]);
-        return row;
+        const [rows] = await pool.execute(sql, [dia, id_profissional]);
+        return rows;
     },
 
     agendar: async (id_cliente, id_profissional, id_servico, dia, horas) => {

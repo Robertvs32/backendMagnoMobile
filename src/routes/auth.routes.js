@@ -5,6 +5,8 @@ import admController from "../controllers/adm.controller.js";
 import agendamentoController from "../controllers/agendamento.controller.js";
 import globalController from "../controllers/global.controller.js";
 import clienteController from "../controllers/cliente.controller.js";
+import diasOffController from "../controllers/diasOff.controller.js";
+import servicosController from "../controllers/servicos.controller.js";
 
 const router = Router();
 
@@ -12,16 +14,15 @@ const router = Router();
 router.post('/cadastrarcliente', authController.cadastroCliente); // CADASTRAR USUARIO
 router.post('/login', authController.login); // FAZER LOGIN
 router.post('/refreshtoken', authController.refreshToken) // VALIDAR REFRESH TOKEN E ENVIAR NOVO TOKEN
-router.get('/verificarverificado/:uuid', authController.verificarVerificado); // VER SE JA ESTA VERIFICADO
+router.get('/consultarverificado/:uuid', authController.consultarVerificado); // VER SE JA ESTA VERIFICADO
 router.post('/verificar', authController.verificar); //VERIFICAR USUARIO
 
 
 //ROTAS ADM -------------------------------------------------------------------------------------------------------------------------
-router.post('/adicionadiaoff', authMiddleware.verifyToken, authMiddleware.verifyAdm, admController.adicionaDiaOff);
-router.patch('/atualizarvalorservico', authMiddleware.verifyToken, authMiddleware.verifyAdm, admController.atualizarValorServico);
+router.post('/adicionadiaoff', authMiddleware.verifyToken, authMiddleware.verifyAdm, diasOffController.adicionaDiaOff);
+router.patch('/atualizarvalorservico', authMiddleware.verifyToken, authMiddleware.verifyAdm, servicosController.atualizarValorServico);
 router.post('/cadastrarprofissional', authMiddleware.verifyToken, authMiddleware.verifyAdm, authController.cadastroProfissional);
-router.get('/buscaragendamentosadm', authMiddleware.verifyToken, authMiddleware.verifyAdm, admController.buscarAgendamentosAdm);
-router.post('/buscaragendamentosadmfiltro', authMiddleware.verifyToken, authMiddleware.verifyAdm, admController.buscarAgendamentosAdmFiltro);
+router.get('/buscaragendamentosadm', authMiddleware.verifyToken, authMiddleware.verifyAdm, globalController.buscarAgendamentos);
 // router.post('/buscarprofissionalid');
 // router.post('/desativarusuarioid');
 // router.post('/buscarclientes');

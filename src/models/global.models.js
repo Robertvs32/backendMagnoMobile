@@ -3,7 +3,7 @@ import pool from "../database/pool.js";
 const globalModels = {
 
     buscarServicos: async () => {
-        const sql = "SELECT * from servicos";
+        const sql = "SELECT * from servicos WHERE status = 'ativo'";
         const [servicos] = await pool.execute(sql)
 
         return servicos;
@@ -21,6 +21,24 @@ const globalModels = {
         const [clientes] = await pool.execute(sql);
 
         return clientes;
+    },
+
+    buscarUserId: async (id) => {
+        const [row] = await pool.execute("SELECT * FROM usuarios WHERE id = ?", [id]);
+        if(row.length > 0){
+            return row[0];
+        }
+        return null;
+    },
+
+    buscaUserEmail: async (email) => {
+        const sqlBuscaUser = "SELECT * FROM usuarios WHERE email = (?)";
+
+        const [resultBuscaUser] = await pool.execute(sqlBuscaUser, [email]);
+        if(resultBuscaUser.length > 0){
+            return resultBuscaUser[0];
+        }
+        return null;
     },
 
     buscarAgendamentoId: async (id_agendamento) => {

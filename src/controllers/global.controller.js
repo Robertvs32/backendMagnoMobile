@@ -20,6 +20,15 @@ const globalController = {
         }
     },
 
+    buscarClientes: async (req, res) => {
+        try{
+            const clientes = await globalModels.buscarClientes();
+            res.status(200).json({clientes});
+        }catch(error){
+            res.status(500).json({mensagem: `Erro ao buscar clientes - ${error.message}`})
+        }
+    },
+
     buscarAgendamentoId: async (req, res) => {
         try{
             const { id_agendamento } = req.body;
@@ -32,14 +41,16 @@ const globalController = {
         }
     },
 
-    buscarClientes: async (req, res) => {
+    buscarAgendamentos: async (req, res) => {
         try{
-            const clientes = await globalModels.buscarClientes();
-            res.status(200).json({clientes});
+            const { id_cliente, id_profissional, dia } = req.body;
+            const agendamentos = await clienteModels.buscarAgendamentos(id_cliente, id_profissional, dia);
+
+            res.status(200).json({agendamentos});
         }catch(error){
-            res.status(500).json({mensagem: `Erro ao buscar clientes - ${error.message}`})
+            res.status(500).json({mensagem: `Erro ao buscar agendamentos - ${error.message}`});
         }
-    },
+    }
 
 }
 

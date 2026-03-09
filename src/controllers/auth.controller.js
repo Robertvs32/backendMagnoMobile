@@ -42,8 +42,17 @@ const authController = {
         try{
             const { email, senha } = req.body;
             const resultLogin = await authServices.validarLogin(email, senha);
+            const {  refreshToken, ...objUser } = resultLogin;
 
-            res.status(200).json(resultLogin)
+            res.cookie('refreshToken', refreshToken, {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'Lax',
+                // domain: '.url.com.br',
+                maxAge: 60 * 60 * 24 * 1000
+            })
+
+            res.status(200).json({ objUser })
         }catch(error){
             res.status(500).json({
                 mensagem: error.message,
@@ -53,18 +62,16 @@ const authController = {
 
     refreshToken: async (req, res) => {
         try{
-            const newToken = await authServices.validarRefreshToken(req.body.refreshToken);
-            res.status(200).json({
-                token: newToken
-            })
+            const newToken = await authServices.validarRefreshToken(req.cookies.refreshToken);
+            res.status(200).json({ token: newToken })
         }catch(error){
-            res.status(401).json({
+            res.status(403).json({
                 mensagem: "Login expirou! Faca login novamente!"
             })
         }
     },
 
-    verificarVerificado: async (req, res) => {
+    consultarVerificado: async (req, res) => {
         try{
             const uuid = req.params.uuid;
             const verificado = await authModels.buscaVerificado(uuid);
@@ -87,6 +94,5 @@ const authController = {
     }
 
 }
-
 
 export default authController;

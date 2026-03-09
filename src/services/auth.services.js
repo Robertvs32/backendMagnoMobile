@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 import bcrypt from 'bcrypt';
 import authModels from '../models/auth.models.js';
 import jwt from 'jsonwebtoken'
+import globalModels from '../models/global.models.js';
 import crypto from 'node:crypto';
 
 dotenv.config({path: '../../.env'});
@@ -53,34 +54,31 @@ const authServices = {
     },
 
     validarLogin: async (email, senha) => {
-        const user = await authModels.buscaUserEmail(email);
+        //FUNCAO TESTA EMAIL REGEX
+        const user = await globalModels.buscaUserEmail(email);
 
         if(!user){
-            throw new Error("Usuario nao encontrado!");
+            throw new Error("Verifique email ou senha");
         }
 
         if(user.verificado == 0){
             throw new Error("Usuario nao verificado!");
         }
 
-        const comparacaoHash = await bcrypt.compare(senha, user.senha);
+        const comparacaoHash = await bcrypt.compare(senha, user.hash_senha);
         
         if(!comparacaoHash){
-            throw new Error("Senha incorreta");
+            throw new Error("Verifique email ou senha");
         }
 
         const payloadToken = {
-            roles: user.roles,
-            id: user.id
+            id: user.id,
+            nome: user.nome,
+            roles: user.roles
         }
 
-        const secretToken = process.env.JWT_SECRET;
-        const secretRefreshToken = process.env.JWT_SECRET_REFRESH;
-
-        const token = jwt.sign(payloadToken, secretToken, { expiresIn: '1m'});
-        const refreshToken = jwt.sign(payloadToken, secretRefreshToken, { expiresIn: '7d'});
-
-        await authModels.guardarRefreshToken(user.id, refreshToken);
+        const token = jwt.sign(payloadToken, process.env.JWT_SECRET, { expiresIn: '15m'});
+        const refreshToken = jwt.sign(payloadToken, process.env.JWT_SECRET_REFRESH, { expiresIn: '1d'});
 
         return{
             usuario: {
@@ -99,23 +97,13 @@ const authServices = {
         }
         const refreshTokenVerify = jwt.verify(refreshToken, process.env.JWT_SECRET_REFRESH); //verifica se e veridico
 
-        const id = refreshTokenVerify.id; //pega o id do refresh token
-
-        const user = await authModels.buscarUserId(id); //busca os dados do usuario do mysql
-
-        //verifica se os refresh sao iguais e se o usuario tem refresh token guardado no db
-        if(!user.refresh_token || user.refresh_token !== refreshToken){ 
-            throw new Error("Refresh Token invalido!");
-        }
-
-        //payload pra enviar pro token
         const payloadToken = {
-            roles: user.roles,
-            id: user.id
+            id: refreshTokenVerify.id,
+            nome: refreshTokenVerify.nome,
+            roles: refreshTokenVerify.roles
         }
 
-        //cria token
-        const novoToken = jwt.sign(payloadToken, process.env.JWT_SECRET, { expiresIn: '1m' });
+        const novoToken = jwt.sign(payloadToken, process.env.JWT_SECRET, { expiresIn: '15m' });
 
         return novoToken;
     }
