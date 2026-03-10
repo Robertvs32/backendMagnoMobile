@@ -31,9 +31,9 @@ const globalController = {
 
     buscarAgendamentoId: async (req, res) => {
         try{
-            const { id_agendamento } = req.body;
+            const { id } = req.params;
 
-            const agendamento = await globalModels.buscarAgendamentoId(id_agendamento);
+            const agendamento = await globalModels.buscarAgendamentoId(id);
 
             res.status(200).json({agendamento});
         }catch(error){

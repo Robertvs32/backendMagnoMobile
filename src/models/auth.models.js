@@ -3,13 +3,13 @@ import pool from '../database/pool.js';
 const authModels = {
 
     cadastrarCliente: async ({ uuid, nome, sobrenome, celular, email, cep, numero, senha}) => {
-        const sqlCadastro = "INSERT INTO usuarios(uuid, nome, sobrenome, celular, email, senha, cep, numero, roles) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'cliente')";
+        const sqlCadastro = "INSERT INTO usuarios(uuid, nome, sobrenome, celular, email, hash_senha, cep, numero, roles) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'cliente')";
 
         await pool.execute(sqlCadastro, [uuid, nome, sobrenome, celular, email, senha, cep, numero]); 
     },
 
     cadastrarProfissional: async ({ uuid, nome, sobrenome, celular, email, cep, numero, senha}) => {
-        const sqlCadastro = "INSERT INTO usuarios(uuid, nome, sobrenome, celular, email, senha, cep, numero, roles) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'barbeiro')";
+        const sqlCadastro = "INSERT INTO usuarios(uuid, nome, sobrenome, celular, email, hash_senha, cep, numero, roles) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'barbeiro')";
 
         const [row] = await pool.execute(sqlCadastro, [uuid, nome, sobrenome, celular, email, senha, cep, numero]); 
         return row.insertId;

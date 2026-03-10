@@ -7,7 +7,7 @@ const agendamentoServices = {
     agendar: async (objAgendamento) => {
         const { id_cliente, id_profissional, id_servico, dia, hora} = objAgendamento;
 
-        const arrayHorarios = await buscaHorariosReservados(dia, id_profissional)
+        const arrayHorarios = await agendamentoServices.buscaHorariosReservados(dia, id_profissional)
 
         if(arrayHorarios.includes(hora)){
             throw new Error("Horario ja agendado, selecione outro horario!");

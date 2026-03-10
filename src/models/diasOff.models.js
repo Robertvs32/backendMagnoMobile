@@ -9,14 +9,29 @@ const diasOffModels = {
 
     retiraDiaOff: async (id) => {
         const sql = "DELETE FROM dias_off WHERE id = ?";
-        await pool.execute(sql, [id]);
+        const [row] = await pool.execute(sql, [id]);
+
+        if(row.affectedRows == 0){
+            throw new Error("Data nao encontrada!");
+        }
     },
 
-    buscarDiasOff: async () => {
+    buscaDiasOff: async () => {
         const sql = "SELECT * FROM dias_off";
         const [rows] = await pool.query(sql);
         return rows;
-    }
+    },
+
+    verificaDiaOff: async (dia) => {
+        const sql = "SELECT * FROM dias_off WHERE data_off = ?";
+        const [row] = await pool.execute(sql, [dia]);
+
+        if(row.length == 0){
+            return false;
+        }
+
+        return true
+    },
 
 }
 

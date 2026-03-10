@@ -19,7 +19,7 @@ CREATE TABLE usuarios(
     hash_senha VARCHAR(255) NOT NULL,
     cep CHAR(8) NOT NULL,
     numero VARCHAR(10) NOT NULL,
-    roles ENUM('cliente', 'barbeiro', 'adm') NOT NULL DEFAULT 'cliente' ,
+    roles ENUM('cliente', 'barbeiro', 'adm') NOT NULL DEFAULT 'cliente',
     verificado BOOLEAN NOT NULL DEFAULT false,
     status ENUM('ativo', 'desativado'),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -29,10 +29,10 @@ CREATE TABLE usuarios(
 
 CREATE TABLE servicos(
     id INT NOT NULL AUTO_INCREMENT,
-    nome VARCHAR(30) NOT NULL,
+    nome VARCHAR(30) NOT NULL UNIQUE,
     blocos INT NOT NULL,
     preco DECIMAL(6, 2) NOT NULL,
-    status ENUM('ativo', 'desativado'),
+    status ENUM('ativo', 'desativado') NOT NULL DEFAULT 'ativo',
 
     CONSTRAINT PK_ID_SERVICO PRIMARY KEY (id)
 );
@@ -43,7 +43,7 @@ CREATE TABLE agendamentos(
     id_profissional INT NOT NULL,
     id_servico INT NOT NULL,
     dia DATE NOT NULL,
-    horario DATETIME NOT NULL,
+    horario VARCHAR(10) NOT NULL,
     status ENUM('pendente', 'cancelado', 'concluido') NOT NULL DEFAULT 'pendente',
     feedback_local VARCHAR(255) default null,
     feedback_profissional VARCHAR(255) default null,

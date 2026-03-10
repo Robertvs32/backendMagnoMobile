@@ -44,18 +44,21 @@ const globalModels = {
     buscarAgendamentoId: async (id_agendamento) => {
         const sql = 
         `
-            SELECT * FROM agendamentos WHERE id_agendamento = ?
+            SELECT * FROM agendamentos WHERE id = ?
         `
         const [row] = await pool.execute(sql, [id_agendamento]);
-        const agendamento = row[0];
+
+        if(row.length == 0){
+            throw new Error("Agendamento nao encontrado!");
+        }
         
-        return agendamento;
+        return row[0];
     },
 
     buscarIdClienteAgendamento: async (id_agendamento) => {
         const sql = 
         `
-            SELECT id_cliente FROM agendamentos WHERE id_agendamento = ?
+            SELECT id_cliente FROM agendamentos WHERE id = ?
         `
         const [row] = await pool.execute(sql, [id_agendamento]);
 

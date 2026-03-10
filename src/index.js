@@ -11,7 +11,7 @@ dotenv.config({path: '../.env'});
 const app = express();
 
 app.use(cors({
-    origin: '*',
+    origin: ['url1', 'url2'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'ngrok-skip-browser-warning']
 }));

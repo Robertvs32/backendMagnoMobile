@@ -11,50 +11,52 @@ import servicosController from "../controllers/servicos.controller.js";
 const router = Router();
 
 //ROTAS AUTH -------------------------------------------------------------------------------------------------------------------------
-router.post('/cadastrarcliente', authController.cadastroCliente); // CADASTRAR USUARIO
-router.post('/login', authController.login); // FAZER LOGIN
-router.post('/refreshtoken', authController.refreshToken) // VALIDAR REFRESH TOKEN E ENVIAR NOVO TOKEN
-router.get('/consultarverificado/:uuid', authController.consultarVerificado); // VER SE JA ESTA VERIFICADO
-router.post('/verificar', authController.verificar); //VERIFICAR USUARIO
+router.post('/cadastrarcliente', authController.cadastroCliente);
+router.post('/login', authController.login);
+router.get('/refreshtoken', authController.refreshToken)
+router.get('/verificarverificado/:uuid', authController.consultarVerificado);
+router.post('/verificarusuario/:uuid', authController.verificar);
+router.post('/desativarusuario', authMiddleware.verifyToken, authMiddleware.verifyAdm, admController.desativarUsuario);
 
 
 //ROTAS ADM -------------------------------------------------------------------------------------------------------------------------
-router.post('/adicionadiaoff', authMiddleware.verifyToken, authMiddleware.verifyAdm, diasOffController.adicionaDiaOff);
 router.patch('/atualizarvalorservico', authMiddleware.verifyToken, authMiddleware.verifyAdm, servicosController.atualizarValorServico);
 router.post('/cadastrarprofissional', authMiddleware.verifyToken, authMiddleware.verifyAdm, authController.cadastroProfissional);
-router.get('/buscaragendamentosadm', authMiddleware.verifyToken, authMiddleware.verifyAdm, globalController.buscarAgendamentos);
-// router.post('/buscarprofissionalid');
-// router.post('/desativarusuarioid');
-// router.post('/buscarclientes');
+router.post('/buscaragendamentosadm', authMiddleware.verifyToken, authMiddleware.verifyAdm, admController.buscarAgendamentosAdm);
+
+//ROTAS DIAS OFF
+router.get('/verificadiaoff/:dia', authMiddleware.verifyToken, diasOffController.verificaDiaOff);
+router.post('/adicionadiaoff', authMiddleware.verifyToken, authMiddleware.verifyAdm, diasOffController.adicionaDiaOff);
+router.post('/retiradiaoff', authMiddleware.verifyToken, authMiddleware.verifyAdm, diasOffController.retiraDiaOff);
+router.get('/buscadiasoff', authMiddleware.verifyToken, authMiddleware.verifyAdm, diasOffController.buscaDiasOff);
 
 
 //ROTAS PROFISSIONAL -------------------------------------------------------------------------------------------------------------------------
 // router.post('/atualizastatusagendamento');
-// router.post('/buscaragendamentoprofissional');
-
 
 //ROTAS PROFISSIONAL E ADM -------------------------------------------------------------------------------------------------------------------------
 // router.post('/atualizastatusagendamento');
 // router.post('/bloquearhorario');
 
+//ROTAS SERVICO
+router.post('/cadastrarservico', authMiddleware.verifyToken, authMiddleware.verifyAdm, servicosController.cadastrarServico)
+
 
 //ROTAS GLOBAL -------------------------------------------------------------------------------------------------------------------------
-router.post('/buscaragendamentoid', authMiddleware.verifyToken, globalController.buscarAgendamentoId);
+router.get('/buscaragendamentoid/:id', authMiddleware.verifyToken, globalController.buscarAgendamentoId);
 router.get('/buscarservicos', authMiddleware.verifyToken, globalController.buscarServicos);
 router.get('/buscarprofissionais', authMiddleware.verifyToken, globalController.buscarProfissionais);
 router.get('/buscarclientes', authMiddleware.verifyToken, globalController.buscarClientes);
 
+
 //ROTAS AGENDAMENTO -------------------------------------------------------------------------------------------------------------------------
-router.post('/verificadiaoff', authMiddleware.verifyToken, agendamentoController.verificaDiaOff);
-router.post('/buscaprofissionaisdisponiveis', authMiddleware.verifyToken, agendamentoController.buscaProfissionaisDisponiveis);
-router.post('/buscahorariosreservados', authMiddleware.verifyToken, agendamentoController.buscaHorariosReservados);
+router.get('/buscaprofissionaisdisponiveis/:dia_semana', authMiddleware.verifyToken, agendamentoController.buscaProfissionaisDisponiveis);
+router.get('/buscahorariosreservados/:dia/:id_profissional', authMiddleware.verifyToken, agendamentoController.buscaHorariosReservados);
 router.post('/agendar', authMiddleware.verifyToken, agendamentoController.agendar);
     
 
 //ROTAS CLIENTE -------------------------------------------------------------------------------------------------------------------------
 router.post('/enviarfeedback', authMiddleware.verifyToken, clienteController.enviarFeedback);
-router.post('/buscaragendamentoscliente', authMiddleware.verifyToken, clienteController.buscarAgendamentosCliente);
-router.post('/buscaragendamentosclientefiltro', authMiddleware.verifyToken, clienteController.buscarAgendamentosClienteFiltro);
 router.post('/cancelaragendamentocliente', authMiddleware.verifyToken, clienteController.cancelarAgendamentoCliente)
 
 

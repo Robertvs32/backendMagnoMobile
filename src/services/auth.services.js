@@ -4,6 +4,7 @@ import authModels from '../models/auth.models.js';
 import jwt from 'jsonwebtoken'
 import globalModels from '../models/global.models.js';
 import crypto from 'node:crypto';
+import admModels from '../models/adm.models.js';
 
 dotenv.config({path: '../../.env'});
 
@@ -21,7 +22,7 @@ const authServices = {
         await authModels.cadastrarCliente(dados)
 
         return { 
-            uuid: dados.uuid, 
+            uuid: uuid, 
             nome: dados.nome,
             celular: dados.celular
         }
@@ -36,12 +37,12 @@ const authServices = {
 
         dados = {...objetoDados, senha: hashSenha, uuid: uuid}
 
-        const id = await authModels.cadastrarProfissional(dados)
+        const id = await authModels.cadastrarProfissional(dados);
 
-        await authModels.addFolgaProfissional(id);
+        await admModels.addFolgaProfissional(id);
 
         return { 
-            uuid: dados.uuid, 
+            uuid: uuid, 
             nome: dados.nome,
             celular: dados.celular
         }
@@ -78,7 +79,7 @@ const authServices = {
         }
 
         const token = jwt.sign(payloadToken, process.env.JWT_SECRET, { expiresIn: '15m'});
-        const refreshToken = jwt.sign(payloadToken, process.env.JWT_SECRET_REFRESH, { expiresIn: '1d'});
+        const refreshToken = jwt.sign(payloadToken, process.env.JWT_SECRET_REFRESH, { expiresIn: '1m'});
 
         return{
             usuario: {

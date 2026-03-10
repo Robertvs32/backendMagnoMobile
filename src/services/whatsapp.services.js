@@ -1,12 +1,12 @@
 import * as wppconnect from '@wppconnect-team/wppconnect';
 
 let instanciaWhatsapp = null;
-const URL = 'magnobarbearia.com'
+const URL = 'https://magenta-ostrich-407854.hostingersite.com'
 
 export const iniciarWhatsapp = async () => { 
     try{
         const client = await wppconnect.create({
-            session: 'barbearia-session-whatsapp-v2',
+            session: 'barbearia-session',
             mkdirFolder: '../',
             folderNameToken: 'tokens',
             disableWelcome: true,
@@ -14,8 +14,9 @@ export const iniciarWhatsapp = async () => {
             waitForLogin: true,
             autoClose: 0, 
             puppeteerOptions: {
-                headless: true,
-                userDataDir: '../tokens/barbearia-session-whatsapp-v2/browser-data'
+                executablePath: '/usr/bin/google-chrome-stable',
+                headless: false,
+                userDataDir: '../tokens/barbearia-session/browser-data'
             },
             catchQR: (base64Qr, asciiQR) => {
                 console.log(asciiQR);
@@ -24,6 +25,7 @@ export const iniciarWhatsapp = async () => {
 
         instanciaWhatsapp = client;
         console.log("Whatsapp conectado!");
+
     }catch(error){
         console.log(error)
     }

@@ -1,4 +1,4 @@
-import servicosModels from "../models/adm.models.js";
+import servicosModels from "../models/servicos.models.js";
 
 const servicosController = {
 

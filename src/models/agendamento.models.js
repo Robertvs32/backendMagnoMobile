@@ -2,28 +2,17 @@ import pool from "../database/pool.js";
 
 const agendamentoModels = {
 
-    verificaDiaOff: async (dia) => {
-        const sql = "SELECT * FROM dias_off WHERE data_off = ?";
-        const [row] = await pool.execute(sql, [dia]);
-
-        if(row.length == 0){
-            return false;
-        }
-
-        return true
-    },
-
     buscaProfissionaisDisponiveis: async (diaSemana) => {
         const sql = 
         `
         SELECT u.nome, u.sobrenome, u.id
         FROM usuarios as u
-        WHERE roles = 'barbeiro'
+        WHERE roles = 'barbeiro' AND status = 'ativo' AND verificado = true
         AND NOT EXISTS (
             SELECT 1
             FROM folga_profissionais as f
             WHERE u.id = f.id_profissional
-            AND f.dia_da_semana = ?
+            AND f.dia_semana = ?
         )
         `
         const [row] = await pool.execute(sql, [diaSemana]);
@@ -45,7 +34,7 @@ const agendamentoModels = {
     agendar: async (id_cliente, id_profissional, id_servico, dia, horas) => {
         const sql = 
         `
-            INSERT INTO agendamentos (id_cliente, id_profissional, id_servico, dia, horas)
+            INSERT INTO agendamentos (id_cliente, id_profissional, id_servico, dia, horario)
             VALUE(?, ?, ?, ?, ?)
         `
         await pool.execute(sql, [id_cliente, id_profissional, id_servico, dia, horas]);

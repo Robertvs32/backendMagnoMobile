@@ -52,7 +52,7 @@ const authController = {
                 maxAge: 60 * 60 * 24 * 1000
             })
 
-            res.status(200).json({ objUser })
+            res.status(200).json({ ...objUser })
         }catch(error){
             res.status(500).json({
                 mensagem: error.message,
@@ -84,7 +84,7 @@ const authController = {
 
     verificar: async (req, res) => {
         try{
-            const uuid = req.body.uuid;
+            const { uuid } = req.params;
             await authModels.verificarUsuario(uuid);
             res.status(200).json({mensagem: "Usuário verificado!"});
         }catch(error){

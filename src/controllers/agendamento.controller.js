@@ -3,21 +3,10 @@ import agendamentoServices from '../services/agendamento.services.js';
 
 const agendamentoController = {
 
-    verificaDiaOff: async (req, res) => {
-        try{
-            const { dia } = req.body;
-            const result = await agendamentoModels.verificaDiaOff(dia);
-
-            res.status(200).json({resultado: result});
-        }catch(error){
-            res.status(500).json({mensagem: `Erro ao verificar dia off - ${error}`});
-        }   
-    },
-
     buscaProfissionaisDisponiveis: async (req, res) => {
         try{
-            const { diaSemana } = req.body;
-            const arrayProfissionais = await agendamentoModels.buscaProfissionaisDisponiveis(diaSemana);
+            const { dia_semana } = req.params
+            const arrayProfissionais = await agendamentoModels.buscaProfissionaisDisponiveis(dia_semana);
 
             res.status(200).json({arrayProfissionais});
         }catch(error){
@@ -27,7 +16,7 @@ const agendamentoController = {
 
     buscaHorariosReservados: async (req, res) => {
         try{
-            const { dia, id_profissional } = req.body;
+            const { dia, id_profissional } = req.params;
             const arrayHorariosReservados = await agendamentoServices.buscaHorariosReservados(dia, id_profissional);
 
             res.status(200).json({ arrayHorariosReservados })
