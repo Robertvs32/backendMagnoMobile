@@ -1,11 +1,12 @@
 import globalModels from "../models/global.models.js";
+import globalServices from "../services/global.services.js";
 
 const globalController = {
 
     buscarServicos: async (req, res) => {
         try{
             const servicos = await globalModels.buscarServicos();
-            res.status(200).json({servicos});
+            res.status(200).json({...servicos});
         }catch(error){
             res.status(500).json({mensagem: `Erro ao buscar servicos - ${error.message}`})
         }
@@ -14,7 +15,7 @@ const globalController = {
     buscarProfissionais: async (req, res) => {
         try{
             const profissionais = await globalModels.buscarProfissionais();
-            res.status(200).json({profissionais});
+            res.status(200).json(profissionais);
         }catch(error){
             res.status(500).json({mensagem: `Erro ao buscar profissionais - ${error.message}`})
         }
@@ -23,7 +24,7 @@ const globalController = {
     buscarClientes: async (req, res) => {
         try{
             const clientes = await globalModels.buscarClientes();
-            res.status(200).json({clientes});
+            res.status(200).json(clientes);
         }catch(error){
             res.status(500).json({mensagem: `Erro ao buscar clientes - ${error.message}`})
         }
@@ -35,20 +36,34 @@ const globalController = {
 
             const agendamento = await globalModels.buscarAgendamentoId(id);
 
-            res.status(200).json({agendamento});
+            res.status(200).json(agendamento);
         }catch(error){
             res.status(500).json({mensagem: `Erro ao buscar agendamento - ${error.message}`})
         }
     },
 
-    buscarAgendamentos: async (req, res) => {
+    concluiAgendamentoBarbeiro: async (req, res) => {
         try{
-            const { id_cliente, id_profissional, dia } = req.body;
-            const agendamentos = await clienteModels.buscarAgendamentos(id_cliente, id_profissional, dia);
+            const { id } = req.body;
+            const id_barbeiro = req.userId
 
-            res.status(200).json({agendamentos});
+            await globalServices.concluiAgendamentoBarbeiro(id, id_barbeiro);
+
+            res.status(200).json({mensagem: "Agendamento concluido!"});
         }catch(error){
-            res.status(500).json({mensagem: `Erro ao buscar agendamentos - ${error.message}`});
+            res.status(500).json({mensagem: `Erro ao concluir agendamento: ${error.message}`});
+        }
+    },
+
+    concluiAgendamentoAdm: async (req, res) => {
+        try{
+            const { id } = req.body;
+            await globalModels.concluiAgendamento(id);
+
+            res.status(200).json({mensagem: "Agendamento concluido!"});
+
+        }catch(error){
+            res.status(500).json({mensagem: `Erro ao finalizar agendamento: ${error.message}`});
         }
     }
 

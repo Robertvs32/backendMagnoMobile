@@ -10,7 +10,7 @@ const globalModels = {
     },
 
     buscarProfissionais: async () => {
-        const sql = "SELECT nome, id FROM usuarios WHERE roles = 'barbeiro'";
+        const sql = "SELECT nome, email, id FROM usuarios WHERE roles = 'barbeiro'";
         const [profissionais] = await pool.execute(sql);
 
         return profissionais;
@@ -21,24 +21,6 @@ const globalModels = {
         const [clientes] = await pool.execute(sql);
 
         return clientes;
-    },
-
-    buscarUserId: async (id) => {
-        const [row] = await pool.execute("SELECT * FROM usuarios WHERE id = ?", [id]);
-        if(row.length > 0){
-            return row[0];
-        }
-        return null;
-    },
-
-    buscaUserEmail: async (email) => {
-        const sqlBuscaUser = "SELECT * FROM usuarios WHERE email = (?)";
-
-        const [resultBuscaUser] = await pool.execute(sqlBuscaUser, [email]);
-        if(resultBuscaUser.length > 0){
-            return resultBuscaUser[0];
-        }
-        return null;
     },
 
     buscarAgendamentoId: async (id_agendamento) => {
@@ -63,6 +45,31 @@ const globalModels = {
         const [row] = await pool.execute(sql, [id_agendamento]);
 
         return row[0].id_cliente;
+    },
+
+    buscarIdBarbeiroAgendamento: async (id_agendamento) => {
+        const sql = 
+        `
+            SELECT id_profissional FROM agendamentos WHERE id = ?
+        `
+        const [row] = await pool.execute(sql, [id_agendamento]);
+
+        if(row.lenght == 0){
+            throw new Error("Erro ao verificar agendamento (barbeiro id)");
+        }
+
+        return row[0].id_profissional;
+        
+    },
+    
+
+    concluiAgendamento: async (id) => {
+        const sql = "UPDATE agendamentos SET status = 'concluido' WHERE id = ? AND status <> 'concluido' ";
+        const [row] = await pool.execute(sql, [id]);
+        
+        if(row.affectedRows == 0){
+            throw new Error("Erro ao concluir agendamento, verifique se ja esta concluido!");
+        }
     }
 
 }

@@ -28,6 +28,18 @@ const admController = {
         }catch(error){
             res.status(500).json({mensagem: error?.message || "Erro ao buscar agendamentos"});
         }
+    },
+
+    buscaUserId: async (req, res) => {
+        try{
+            const { id } = req.params;
+            const dadosUsuario = await admModels.buscarUserId(id);
+
+            res.status(200).json(dadosUsuario);
+
+        }catch(error){
+            res.status(500).json({mensagem: error?.message || "Erro ao buscar dados do usuario"});
+        }
     }
 
 }

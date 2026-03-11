@@ -33,7 +33,17 @@ const authModels = {
         if(result.affectedRows == 0){
             throw new Error("Erro ao verificar usuário!");
         }
-    }
+    },
+
+    buscaUserEmail: async (email) => {
+        const sqlBuscaUser = "SELECT * FROM usuarios WHERE email = (?)";
+
+        const [resultBuscaUser] = await pool.execute(sqlBuscaUser, [email]);
+        if(resultBuscaUser.length > 0){
+            return resultBuscaUser[0];
+        }
+        return null;
+    },
 
 }
 

@@ -84,7 +84,7 @@ const authController = {
 
     verificar: async (req, res) => {
         try{
-            const { uuid } = req.params;
+            const { uuid } = req.body;
             await authModels.verificarUsuario(uuid);
             res.status(200).json({mensagem: "Usuário verificado!"});
         }catch(error){

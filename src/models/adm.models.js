@@ -43,7 +43,25 @@ const admModels = {
         const [rows] = await pool.execute(sql, [...valores]);
     
         return rows;
-    }
+    },
+
+    buscarUserId: async (id) => {
+        const [row] = await pool.execute("SELECT * FROM usuarios WHERE id = ?", [id]);
+        if(row.length > 0){
+            return row[0];
+        }
+        return null;
+    },
+
+    buscaUserEmail: async (email) => {
+        const sqlBuscaUser = "SELECT * FROM usuarios WHERE email = (?)";
+
+        const [resultBuscaUser] = await pool.execute(sqlBuscaUser, [email]);
+        if(resultBuscaUser.length > 0){
+            return resultBuscaUser[0];
+        }
+        return null;
+    },
 
 }
 

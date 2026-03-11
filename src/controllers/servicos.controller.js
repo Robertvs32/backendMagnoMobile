@@ -24,7 +24,7 @@ const servicosController = {
 
             res.status(200).json({mensagem: `Servico id:${id}, desativado!`});
         }catch(error){
-            res.status(500).json({mensagem: `Erro ao desativar servico`})
+            res.status(500).json({mensagem: error?.message || 'Erro ao desativar servico'})
         }
     },
 

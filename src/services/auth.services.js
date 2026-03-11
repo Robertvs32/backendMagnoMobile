@@ -56,7 +56,7 @@ const authServices = {
 
     validarLogin: async (email, senha) => {
         //FUNCAO TESTA EMAIL REGEX
-        const user = await globalModels.buscaUserEmail(email);
+        const user = await authModels.buscaUserEmail(email);
 
         if(!user){
             throw new Error("Verifique email ou senha");

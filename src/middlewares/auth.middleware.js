@@ -38,6 +38,18 @@ const authMiddleware = {
             res.status(403).json({mensagem: "Acesso negado!"})
         };
         
+    },
+
+    verifyBarbeiro: (req, res, next) => {
+        try{
+            if(req.roles !== 'barbeiro'){
+                throw new Error("Acesso negado!");
+            }
+            next();
+        }catch(error){
+            res.status(403).json({mensagem: "Acesso negado!"})
+        };
+        
     }
 
 }

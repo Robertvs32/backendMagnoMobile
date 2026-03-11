@@ -1,6 +1,5 @@
 import agendamentoModels from "../models/agendamento.models.js"
 import { flatArrayAgendamentos } from "../utils/agendamentos.utils.js";
-import servicosModels from "../models/servicos.models.js";
 
 const agendamentoServices = {
 

@@ -11,7 +11,7 @@ dotenv.config({path: '../.env'});
 const app = express();
 
 app.use(cors({
-    origin: ['url1', 'url2'],
+    origin: ['https://magenta-ostrich-407854.hostingersite.com'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'ngrok-skip-browser-warning']
 }));

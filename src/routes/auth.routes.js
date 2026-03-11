@@ -15,14 +15,15 @@ router.post('/cadastrarcliente', authController.cadastroCliente);
 router.post('/login', authController.login);
 router.get('/refreshtoken', authController.refreshToken)
 router.get('/verificarverificado/:uuid', authController.consultarVerificado);
-router.post('/verificarusuario/:uuid', authController.verificar);
+router.post('/verificar', authController.verificar);
 router.post('/desativarusuario', authMiddleware.verifyToken, authMiddleware.verifyAdm, admController.desativarUsuario);
 
-
-//ROTAS ADM -------------------------------------------------------------------------------------------------------------------------
-router.patch('/atualizarvalorservico', authMiddleware.verifyToken, authMiddleware.verifyAdm, servicosController.atualizarValorServico);
+//ROTAS ADM ------------------------------------------------------------------------------------------------------------------------
 router.post('/cadastrarprofissional', authMiddleware.verifyToken, authMiddleware.verifyAdm, authController.cadastroProfissional);
 router.post('/buscaragendamentosadm', authMiddleware.verifyToken, authMiddleware.verifyAdm, admController.buscarAgendamentosAdm);
+router.get('/buscauserid/:id', authMiddleware.verifyToken, authMiddleware.verifyAdm, admController.buscaUserId);
+router.post('/concluiagendamentoadm', authMiddleware.verifyToken, authMiddleware.verifyAdm, globalController.concluiAgendamentoAdm);
+// router.post('./cancelaagendamentoadm', authMiddleware.verifyToken, authMiddleware.verifyAdm,)
 
 //ROTAS DIAS OFF
 router.get('/verificadiaoff/:dia', authMiddleware.verifyToken, diasOffController.verificaDiaOff);
@@ -30,23 +31,24 @@ router.post('/adicionadiaoff', authMiddleware.verifyToken, authMiddleware.verify
 router.post('/retiradiaoff', authMiddleware.verifyToken, authMiddleware.verifyAdm, diasOffController.retiraDiaOff);
 router.get('/buscadiasoff', authMiddleware.verifyToken, authMiddleware.verifyAdm, diasOffController.buscaDiasOff);
 
-
-//ROTAS PROFISSIONAL -------------------------------------------------------------------------------------------------------------------------
-// router.post('/atualizastatusagendamento');
-
-//ROTAS PROFISSIONAL E ADM -------------------------------------------------------------------------------------------------------------------------
-// router.post('/atualizastatusagendamento');
-// router.post('/bloquearhorario');
-
 //ROTAS SERVICO
 router.post('/cadastrarservico', authMiddleware.verifyToken, authMiddleware.verifyAdm, servicosController.cadastrarServico)
+router.post('/desativarservico', authMiddleware.verifyToken, authMiddleware.verifyAdm, servicosController.desativarServico)
+router.patch('/atualizarvalorservico', authMiddleware.verifyToken, authMiddleware.verifyAdm, servicosController.atualizarValorServico);
 
 
 //ROTAS GLOBAL -------------------------------------------------------------------------------------------------------------------------
-router.get('/buscaragendamentoid/:id', authMiddleware.verifyToken, globalController.buscarAgendamentoId);
+router.get('/buscaragendamentoid/:id', authMiddleware.verifyToken, globalController.buscarAgendamentoId); 
 router.get('/buscarservicos', authMiddleware.verifyToken, globalController.buscarServicos);
 router.get('/buscarprofissionais', authMiddleware.verifyToken, globalController.buscarProfissionais);
 router.get('/buscarclientes', authMiddleware.verifyToken, globalController.buscarClientes);
+
+
+//BARBEIRO
+router.post('/concluiagendamentobarbeiro', authMiddleware.verifyToken, authMiddleware.verifyBarbeiro, globalController.concluiAgendamentoBarbeiro);
+// router.post('./cancelaagendamentobarbeiro', authMiddleware.verifyToken, authMiddleware.verifyBarbeiro,)
+
+
 
 
 //ROTAS AGENDAMENTO -------------------------------------------------------------------------------------------------------------------------
@@ -58,6 +60,7 @@ router.post('/agendar', authMiddleware.verifyToken, agendamentoController.agenda
 //ROTAS CLIENTE -------------------------------------------------------------------------------------------------------------------------
 router.post('/enviarfeedback', authMiddleware.verifyToken, clienteController.enviarFeedback);
 router.post('/cancelaragendamentocliente', authMiddleware.verifyToken, clienteController.cancelarAgendamentoCliente)
+router.post('/buscaragendamentoscliente', authMiddleware.verifyToken, clienteController.buscarAgendamentosCliente)
 
 
 export default router;
