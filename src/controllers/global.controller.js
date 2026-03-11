@@ -65,6 +65,26 @@ const globalController = {
         }catch(error){
             res.status(500).json({mensagem: `Erro ao finalizar agendamento: ${error.message}`});
         }
+    },
+
+    buscarBloqueios: async (req, res) => {
+        try{
+            const { id_profissional, dia } = req.body;
+            const arrayBloqueios = await globalServices.buscarBloqueios(id_profissional, dia);
+
+            res.status(200).json({arrayBloqueios});
+        }catch(error){
+            res.status(500).json({mensagem: `Erro ao finalizar agendamento: ${error.message}`});
+        }
+    },
+
+    bloquearHorarioAdm: async (req, res) => {
+        try{
+            const { id_profissional, dia, horas } = await globalServices.bloquearHorario(id_profissional, dia, horas); 
+            res.status(200).json({mensagem: "Horario bloqueado com sucesso!"});
+        }catch(error){
+            res.status(500).json({mensagem: `Erro ao finalizar agendamento: ${error.message}`});
+        }
     }
 
 }

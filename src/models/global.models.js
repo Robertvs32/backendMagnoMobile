@@ -62,7 +62,6 @@ const globalModels = {
         
     },
     
-
     concluiAgendamento: async (id) => {
         const sql = "UPDATE agendamentos SET status = 'concluido' WHERE id = ? AND status <> 'concluido' ";
         const [row] = await pool.execute(sql, [id]);
@@ -70,8 +69,29 @@ const globalModels = {
         if(row.affectedRows == 0){
             throw new Error("Erro ao concluir agendamento, verifique se ja esta concluido!");
         }
-    }
+    },
 
+    cancelaAgendamento: async (id) => {
+        const sql = "UPDATE agendamentos SET status = 'cancelado' WHERE id = ? AND status <> 'concluido'";
+        const [row] = await pool.execute(sql, [id]);
+
+        if(row.affectedRows == 0){
+            throw new Error("Erro ao cancelar agendamento, verifique se ja esta cancelado!");
+        }
+    },
+
+    buscarBloqueios: async (id_profissional, dia) => {
+        const sql = "SELECT horarios FROM bloqueios WHERE id_profissional = ? AND dia = ?";
+        const [rows] = await pool.execute(sql, [id_profissional, dia]);
+
+        return rows;
+    },
+
+    bloquearHorario: async (id_profissional, dia, horas) => {
+        const sql = "INSERT INTO bloqueios(id_profissional, dia, horas) VALUES(?, ?, ?)"
+        await pool.execute(sql, [id_profissional, dia, horas]);
+    }
+    
 }
 
 export default globalModels;

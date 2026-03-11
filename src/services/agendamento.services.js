@@ -1,5 +1,6 @@
 import agendamentoModels from "../models/agendamento.models.js"
 import { flatArrayAgendamentos } from "../utils/agendamentos.utils.js";
+import globalServices from "./global.services.js";
 
 const agendamentoServices = {
 
@@ -7,9 +8,10 @@ const agendamentoServices = {
         const { id_cliente, id_profissional, id_servico, dia, hora} = objAgendamento;
 
         const arrayHorarios = await agendamentoServices.buscaHorariosReservados(dia, id_profissional)
+        const arrayBloqueios = await globalServices.buscarBloqueios(id_profissional, dia);
 
-        if(arrayHorarios.includes(hora)){
-            throw new Error("Horario ja agendado, selecione outro horario!");
+        if(arrayHorarios.includes(hora) || arrayBloqueios.includes(hora)){
+            throw new Error("Horario indisponivel, selecione outro horario!");
         }
 
         await agendamentoModels.agendar(id_cliente, id_profissional, id_servico, dia, hora);

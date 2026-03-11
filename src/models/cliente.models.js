@@ -45,6 +45,8 @@ const clienteModels = {
             valores.push(id_barbeiro)
         }
 
+        sql += 'ORDER BY dia desc'
+
         const [rows] = await pool.execute(sql);
         return rows;
 

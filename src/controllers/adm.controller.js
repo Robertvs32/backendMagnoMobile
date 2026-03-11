@@ -1,4 +1,5 @@
 import admModels from "../models/adm.models.js";
+import globalModels from "../models/global.models.js";
 
 const admController = {
 
@@ -40,8 +41,30 @@ const admController = {
         }catch(error){
             res.status(500).json({mensagem: error?.message || "Erro ao buscar dados do usuario"});
         }
-    }
+    },
 
+    cancelaAgendamentoAdm: async (req, res) => {
+        try{
+            const { id } = req.params;
+            await globalModels.cancelaAgendamento(id);
+            res.status(200).json({mensagem: "Agendamento cancelado!"});
+        }catch(error){
+            res.status(200).json({mensagem: "Erro ao cancelar agendamento!"});
+        }
+    },
+
+    buscaAgendamentosAdm: async (req, res) => {
+        try{
+            const { id_cliente, id_barbeiro, dia } = req.body;
+
+            const agendamentos = await admModels.buscarAgendamentosAdm(id_cliente, id_barbeiro, dia)
+
+            res.status(200).json({agendamentos});
+
+        }catch(error){
+            res.status(500).json({mensagem: "Erro ao buscar agendamentos!"})
+        }
+    }
 }
 
 export default admController

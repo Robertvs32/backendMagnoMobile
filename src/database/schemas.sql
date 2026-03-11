@@ -21,7 +21,7 @@ CREATE TABLE usuarios(
     numero VARCHAR(10) NOT NULL,
     roles ENUM('cliente', 'barbeiro', 'adm') NOT NULL DEFAULT 'cliente',
     verificado BOOLEAN NOT NULL DEFAULT false,
-    status ENUM('ativo', 'desativado'),
+    status ENUM('ativo', 'desativado') NOT NULL DEFAULT 'ativo',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT PK_ID_USUARIO PRIMARY KEY (id)
@@ -36,6 +36,15 @@ CREATE TABLE servicos(
 
     CONSTRAINT PK_ID_SERVICO PRIMARY KEY (id)
 );
+
+CREATE TABLE bloqueios(
+    id INT NOT NULL AUTO_INCREMENT,
+    id_profissional INT NOT NULL UNIQUE,
+    horarios JSON NOT NULL,
+    dia DATE NOT NULL.
+
+    CONSTRAINT FK_ID_PROFISSIONAL FOREIGN KEY(id_profissional) REFERENCES usuarios(id);
+)
 
 CREATE TABLE agendamentos(
     id INT NOT NULL AUTO_INCREMENT,
